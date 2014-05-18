@@ -1,132 +1,133 @@
-/** Class dealing with complex numbers and operations on them
- * @author unknown
- */
+package sk.lovasko.trnava;
 
-package zapoctak;
+public class Complex 
+{
+	private final double re;   
+	private final double im; 
 
-/** Class for Complex operations & storage
- */
-public class Complex {
+	public Complex (final double re, final double im) 
+	{
+		this.re = re;
+		this.im = im;
+	}
 
-    /** real part */
-    private final double re;   
-    
-    /** imaginary part */
-    private final double im; 
+	@Override
+	public final String toString() 
+	{
+		if (im == 0)
+			return String.valueOf(re);
 
-    /** create a new object with the given real and imaginary parts*/
-    public Complex(double real, double imag) {
-        re = real;
-        im = imag;
-    }
+		if (re == 0)
+			return im + "i";
 
-    /** string representation of the invoking Complex object
-     * @return string representation
-     */
-    @Override
-    public String toString() {
-        if (im == 0) {
-            return re + "";
-        }
-        if (re == 0) {
-            return im + "i";
-        }
-        if (im < 0) {
-            return re + " - " + (-im) + "i";
-        }
-        return re + " + " + im + "i";
-    }
+		if (im < 0) 
+			return re + " - " + (-im) + "i";
 
-    /** return abs/modulus/magnitude and angle/phase/argument */
-    public double abs() {
-        return Math.hypot(re, im);
-    }  // Math.sqrt(re*re + im*im)
+		return re + " + " + im + "i";
+	}
 
-    public double phase() {
-        return Math.atan2(im, re);
-    }  // between -pi and pi
+	public final double abs() 
+	{
+		return Math.hypot(re, im);
+	}
 
-    /** return a new Complex object whose value is (this + b) */
-    public Complex plus(Complex b) {
-        Complex a = this;             // invoking object
-        double real = a.re + b.re;
-        double imag = a.im + b.im;
-        return new Complex(real, imag);
-    }
+	public final double phase() 
+	{
+		return Math.atan2(im, re);
+	}
 
-    /** return a new Complex object whose value is (this - b) */
-    public Complex minus(Complex b) {
-        Complex a = this;
-        double real = a.re - b.re;
-        double imag = a.im - b.im;
-        return new Complex(real, imag);
-    }
+	public final Complex plus (final Complex b) 
+	{
+		final Complex a = this;
+		final double real = a.re + b.re;
+		final double imag = a.im + b.im;
 
-    /** return a new Complex object whose value is (this * b) */
-    public Complex times(Complex b) {
-        Complex a = this;
-        double real = a.re * b.re - a.im * b.im;
-        double imag = a.re * b.im + a.im * b.re;
-        return new Complex(real, imag);
-    }
+		return new Complex(real, imag);
+	}
 
-    /** return a new object whose value is (this * alpha) */
-    public Complex times(double alpha) {
-        return new Complex(alpha * re, alpha * im);
-    }
+	public final Complex minus (final Complex b) 
+	{
+		final Complex a = this;
+		final double real = a.re - b.re;
+		final double imag = a.im - b.im;
 
-    /** return a new Complex object whose value is the conjugate of this */
-    public Complex conjugate() {
-        return new Complex(re, -im);
-    }
+		return new Complex(real, imag);
+	}
 
-    /** return a new Complex object whose value is the reciprocal of this */
-    public Complex reciprocal() {
-        double scale = re * re + im * im;
-        return new Complex(re / scale, -im / scale);
-    }
+	public final Complex times (final Complex b) 
+	{
+		final Complex a = this;
+		final double real = a.re * b.re - a.im * b.im;
+		final double imag = a.re * b.im + a.im * b.re;
 
-    /** return the real part */
-    public double re() {
-        return re;
-    }
+		return new Complex(real, imag);
+	}
 
-    /** return the imaginary part */
-    public double im() {
-        return im;
-    }
+	public final Complex times (final double alpha) 
+	{
+		return new Complex(alpha * re, alpha * im);
+	}
 
-    /** return a / b */
-    public Complex divides(Complex b) {
-        Complex a = this;
-        return a.times(b.reciprocal());
-    }
+	public final Complex conjugate () 
+	{
+		return new Complex(re, -im);
+	}
 
-    /** return a new Complex object whose value is the complex exponential of this */
-    public Complex exp() {
-        return new Complex(Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im));
-    }
+	public final Complex reciprocal () 
+	{
+		final double scale = re * re + im * im;
+		return new Complex(re / scale, -im / scale);
+	}
 
-    /** return a new Complex object whose value is the complex sine of this */
-    public Complex sin() {
-        return new Complex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
-    }
+	public final double re () 
+	{
+		return re;
+	}
 
-    /** return a new Complex object whose value is the complex cosine of this */
-    public Complex cos() {
-        return new Complex(Math.cos(re) * Math.cosh(im), -Math.sin(re) * Math.sinh(im));
-    }
+	public final double im () 
+	{
+		return im;
+	}
 
-    /** return a new Complex object whose value is the complex tangent of this */
-    public Complex tan() {
-        return sin().divides(cos());
-    }
+	public final Complex divides (final Complex b) 
+	{
+		final Complex a = this;
+		return a.times(b.reciprocal());
+	}
 
-    /** a static version of plus */
-    public static Complex plus(Complex a, Complex b) {
-        double real = a.re + b.re;
-        double imag = a.im + b.im;
-        Complex sum = new Complex(real, imag);
-        return sum;
-    }
+	public final Complex exp () 
+	{
+		return new Complex(
+			Math.exp(re) * Math.cos(im), 
+			Math.exp(re) * Math.sin(im));
+	}
+
+	public final Complex sin () 
+	{
+		return new Complex(
+			Math.sin(re) * Math.cosh(im), 
+			Math.cos(re) * Math.sinh(im));
+	}
+
+	public final Complex cos () 
+	{
+		return new Complex(
+			 Math.cos(re) * Math.cosh(im), 
+			-Math.sin(re) * Math.sinh(im));
+	}
+
+	public final Complex tan () 
+	{
+		return sin().divides(cos());
+	}
+
+	public static final Complex plus (final Complex a, final Complex b) 
+	{
+		final double real = a.re + b.re;
+		final double imag = a.im + b.im;
+		final Complex sum = new Complex(real, imag);
+
+		return sum;
+	}
 }
+
