@@ -1,4 +1,4 @@
-package sk.lovasko.trnava.palette
+package sk.lovasko.trnava.palette;
 
 public interface Palette 
 {
