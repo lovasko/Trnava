@@ -1,6 +1,6 @@
 package sk.lovasko.trnava.strategy;
 
-public class HighContrast implements Strategy 
+public class HighContrastStrategy implements Strategy 
 {
 	public final double 
 	decide (final int _x, final int _y, final boolean _escaped, 

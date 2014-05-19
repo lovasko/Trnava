@@ -1,6 +1,6 @@
 package sk.lovasko.trnava.strategy;
 
-public class Sine implements Strategy 
+public class SineStrategy implements Strategy 
 {
 	public final double 
 	decide (final int _x, final int _y, final boolean _escaped, 
