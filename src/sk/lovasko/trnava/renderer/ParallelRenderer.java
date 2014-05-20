@@ -37,20 +37,32 @@ public class ParallelRenderer implements Renderer
 			int end_x;
 			int end_y;
 
-			if (x + tile_w >= image.get_width())
-				end_x = image.get_width() - 1;
+			if (x + tile_size.width >= size.width)
+				end_x = size.width - 1;
 			else
-				end_x = x + tile_w - 1;
+				end_x = x + tile_size.width - 1;
 
-			if (y + tile_h >= image.get_height())
-				end_y = image.get_height() - 1;
+			if (y + tile_size.height >= size.height)
+				end_y = size.height - 1;
 			else
 				end_y = y + tile_h - 1;
 
 			Worker worker = new Worker();
+
 			worker.strategy = strategy;
 			worker.palette = palette;
-			//TODO finish worker loading
+			worker.start = new Point(x, y);
+			worker.size = new Dimension(end_x - x, endy - y);
+			worker.minx = Interpolation.single(minx, maxx,
+			    (double)x/(double)size.width);
+			worker.maxx = Interpolation.single(minx, maxx,
+			    (double)end_x/(double)size.width);
+			worker.miny = Interpolation.single(miny, maxy,
+			    (double)y/(double)size.height);
+			worker.maxy = Interpolation.single(miny, maxy,
+			    (double)end_y/(double)size.height);
+			worker.max_limit = max_limit;
+
 			tasks.add(worker);
 		}
 
