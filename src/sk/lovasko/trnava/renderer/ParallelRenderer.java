@@ -19,7 +19,7 @@ public class ParallelRenderer implements Renderer
 	public BufferedImage 
 	render (final double minx, final double miny, final double maxx, 
 	    final double maxy, final int max_limit, final Strategy strategy, 
-	    final Palette palette)
+	    final Palette palette, final Dimension size)
 	{
 		ExecutorService pool = Executors.newFixedThreadPool(thread_count);
 		List<Future<Result>> results = new ArrayList<Future<Result>>();
