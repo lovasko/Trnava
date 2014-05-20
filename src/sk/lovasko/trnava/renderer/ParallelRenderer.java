@@ -11,7 +11,7 @@ public class ParallelRenderer implements Renderer
 {
 	private final int thread_count;
 
-	ParallelRenderer (final int thread_count) 
+	public ParallelRenderer (final int thread_count) 
 	{
 		this.thread_count = thread_count;
 	}
