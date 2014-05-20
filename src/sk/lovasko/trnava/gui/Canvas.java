@@ -1,4 +1,4 @@
-package zapoctak;
+package sk.lovasko.trnava.gui;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package sk.lovasko.trnava;
+package sk.lovasko.trnava.gui;
 
 import java.awt.*;
 import java.awt.event.*;
