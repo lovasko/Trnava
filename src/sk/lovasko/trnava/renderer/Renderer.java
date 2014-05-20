@@ -14,14 +14,14 @@ public interface Renderer
 	 * @param miny fractal top left Y coordinate
 	 * @param maxx fractal bottom right X coordinate
 	 * @param maxy fractal bottom right Y coordinate
-	 * @param limit fractal detail
+	 * @param max_limit fractal detail
 	 * @param s used strategy 
 	 * @param p used palette
 	 * @return generated fractal image
 	 */
 	BufferedImage 
 	render (final double minx, final double miny, final double maxx, 
-	    final double maxy, final int limit, final Strategy strategy, 
+	    final double maxy, final int max_limit, final Strategy strategy, 
 	    final Palette palette);
 }
 
