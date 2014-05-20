@@ -1,99 +1,69 @@
-package zapoctak;
+package sk.lovasko.trnava.renderer;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
-/** Parallel implementation of fractal renderer
- * 
- * @author daniel
- */
-public class parallel implements fractal_renderer {
+public class ParallelRenderer implements Renderer 
+{
+	private final int thread_count;
 
-    public int xx, yy;
-    private double minx, miny, maxx, maxy;
-    private int limit;
-    private BufferedImage img;
-    private strategy s;
-    private palette p;
+	ParallelRenderer (final int thread_count) 
+	{
+		this.thread_count = thread_count;
+	}
 
-    parallel() {
-        xx = -60;
-        yy = 0;
-        img = new BufferedImage(600, 400, BufferedImage.TYPE_INT_RGB);
-    }
+	public BufferedImage 
+	render (final double minx, final double miny, final double maxx, 
+	    final double maxy, final int max_limit, final Strategy strategy, 
+	    final Palette palette)
+	{
+		ExecutorService pool = Executors.newFixedThreadPool(thread_count);
+		List<Future<Result>> results = new ArrayList<Future<Result>>();
+		List<Worker> tasks = new ArrayList<Worker>();
 
-    /** Copy image data from thread to main buffered image
-     * 
-     * @param _img what to copy
-     * @param _xx on which X coordinate
-     * @param _yy on which Y coordinate
-     */
-    public synchronized void put_img_part(BufferedImage _img, int _xx, int _yy) {
-        Graphics2D createGraphics = img.createGraphics();
-        createGraphics.drawImage(_img, _xx, _yy, null);
-        createGraphics.dispose();
-    }
+		for (int x = 0; x < image.get_width(); x += tile_w)
+		for (int y = 0; y < image.get_height(); y += tile_h)
+		{
+			int end_x;
+			int end_y;
 
-    /** Returns unique image part - (xx, yy) as starting point
-     * 
-     * @return new unique job info
-     */
-    public synchronized info get_new_job() {
-        xx += 60;
-        if (xx >= 600) {
-            xx = 0;
-            yy += 40;
-        }
+			if (x + tile_w >= image.get_width())
+				end_x = image.get_width() - 1;
+			else
+				end_x = x + tile_w - 1;
 
-        if (yy >= 400) {
-            return new info(0.0, 0.0, 0.0, 0.0, 0, 0, 0, true, s, p);
-        }
-        
-        double w = maxx - minx;
-        double h = maxy - miny;
-        return new info(minx + w / 600.0 * ((double) xx), miny + h / 400.0 * ((double) yy), minx + w / 600.0 * ((double) (xx + 60)), miny + h / 400.0 * ((double) (yy + 40)), xx, yy, limit, false, s, p);
-    }
+			if (y + tile_h >= image.get_height())
+				end_y = image.get_height() - 1;
+			else
+				end_y = y + tile_h - 1;
 
-    /** Generate fractal image using parallel technology
-     * 
-     * @param _minx fractal top left X coordinate
-     * @param _miny fractal top left Y coordinate
-     * @param _maxx fractal bottom right X coordinate
-     * @param _maxy fractal bottom right Y coordinate
-     * @param _limit fractal detail
-     * @param _s used strategy 
-     * @param _p used palette
-     * @return generated fractal image
-     */
-    public BufferedImage render(double _minx, double _miny, double _maxx, double _maxy, int _limit, strategy _s, palette _p) {
-        minx = _minx;
-        miny = _miny;
-        maxx = _maxx;
-        maxy = _maxy;
-        limit = _limit;
-        s = _s;
-        p = _p;
-        worker[] w = new worker[4];
-        for (int i = 0; i < 4; i++) {
-            w[i] = new worker();
-            w[i].setName("worker" + i);
-            w[i].set_parallel(this);
-            w[i].start();
-        }
-        
-        try {
-            w[0].join();
-            w[1].join();
-            w[2].join();
-            w[3].join();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(parallel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+			Worker worker = new Worker();
+			worker.strategy = strategy;
+			worker.palette = palette;
+			//TODO finish worker loading
+			tasks.add(worker);
+		}
 
-        xx = -60;
-        yy = 0;
-        return img;
-    }
+		try
+		{
+			results = pool.invokeAll(tasks);
+			for (Future<Result> future : results)
+			{
+				Result result = future.get();
+				result.put_to_image(image);
+			}
+		}
+		catch (InterruptedException|ExecutionException e)
+		{
+			System.err.println(e);
+			e.printStackTrace();
+		}
+
+		pool.shutdown();
+	}
 }
+
