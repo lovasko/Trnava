@@ -14,10 +14,12 @@ import java.util.concurrent.ExecutionException;
 public class ParallelRenderer implements Renderer 
 {
 	private final int thread_count;
+	private final Dimension tile_size;
 
-	public ParallelRenderer (final int thread_count) 
+	public ParallelRenderer (final int thread_count, final Dimension tile_size) 
 	{
 		this.thread_count = thread_count;
+		this.tile_size = tile_size;
 	}
 
 	public BufferedImage 
