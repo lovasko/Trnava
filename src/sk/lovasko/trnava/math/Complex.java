@@ -1,6 +1,6 @@
 package sk.lovasko.trnava.math;
 
-public class Complex 
+public final class Complex 
 {
 	private final double re;   
 	private final double im; 
