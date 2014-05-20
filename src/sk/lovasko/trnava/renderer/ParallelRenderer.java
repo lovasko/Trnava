@@ -1,5 +1,9 @@
 package sk.lovasko.trnava.renderer;
 
+import sk.lovasko.trnava.strategy.Strategy;
+import sk.lovasko.trnava.palette.Palette;
+import sk.lovasko.trnava.math.Interpolation;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
