@@ -5,7 +5,7 @@ import sk.lovasko.trnava.palette.Palette;
 
 import java.awt.image.BufferedImage;
 
-public interface fractal_renderer 
+public interface Renderer
 {
 	/** 
 	 * Generate fractal image using custom technology.
