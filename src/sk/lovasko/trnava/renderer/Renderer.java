@@ -4,6 +4,7 @@ import sk.lovasko.trnava.strategy.Strategy;
 import sk.lovasko.trnava.palette.Palette;
 
 import java.awt.image.BufferedImage;
+import java.awt.Dimension;
 
 public interface Renderer
 {
@@ -22,6 +23,6 @@ public interface Renderer
 	BufferedImage 
 	render (final double minx, final double miny, final double maxx, 
 	    final double maxy, final int max_limit, final Strategy strategy, 
-	    final Palette palette);
+	    final Palette palette, final Dimension size);
 }
 
