@@ -16,8 +16,9 @@ public interface Renderer
 	 * @param maxx fractal bottom right X coordinate
 	 * @param maxy fractal bottom right Y coordinate
 	 * @param max_limit fractal detail
-	 * @param s used strategy 
-	 * @param p used palette
+	 * @param strategy used strategy 
+	 * @param palette used palette
+	 * @param size size of the whole image
 	 * @return generated fractal image
 	 */
 	BufferedImage 
