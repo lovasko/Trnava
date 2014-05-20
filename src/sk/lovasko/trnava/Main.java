@@ -1,10 +1,21 @@
 package sk.lovasko.trnava;
 
+import sk.lovasko.trnava.gui.Window;
+
+import javax.swing.SwingUtilities;
+
 public class Main 
 {
 	public static void main(String[] args)
 	{
-		Window window = new Window();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void
+			run()
+			{
+				Window window = new Window();
+			}
+		});
 	}
 }
 
