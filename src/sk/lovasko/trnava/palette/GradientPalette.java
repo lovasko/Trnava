@@ -9,7 +9,8 @@ public final class GradientPalette implements Palette
 	private final List<Double> stops;
 	private final List<Integer> colors;
 
-	public GradientPalette (final int zero_color, final int one_color)
+	public 
+	GradientPalette (final int zero_color, final int one_color)
 	{
 		stops.add(new Double(0.0));
 		colors.add(new Integer(zero_color));
