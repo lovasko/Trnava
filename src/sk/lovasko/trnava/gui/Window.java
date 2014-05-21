@@ -1,244 +1,273 @@
 package sk.lovasko.trnava.gui;
 
+import sk.lovasko.trnava.renderer.Renderer;
+import sk.lovasko.trnava.renderer.SerialRenderer;
+import sk.lovasko.trnava.renderer.ParallelRenderer;
+import sk.lovasko.trnava.strategy.Strategy;
+import sk.lovasko.trnava.strategy.SineStrategy;
+import sk.lovasko.trnava.strategy.HighContrastStrategy;
+import sk.lovasko.trnava.strategy.GradientStrategy;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import javax.swing.*;
 
-/** Main window class
- * 
- * @author daniel
- */
-public class window extends JFrame {
+private final class DetailListener implements ActionListener
+{
+	private final int detail;
+	private final Window window;
 
-    canvas c;
-    int mouse_x, mouse_y, radius;
-    double minx, miny, maxx, maxy;
-    int limit;
-    Component compo;
-    boolean show_rect;
-    BufferStrategy strategy;
+	public
+	DetailListener (final int detail, final Window window)
+	{
+		this.detail = detail;
+		this.window = window;
+	}
 
-    /** Overriden paint - drawing of semi-transparent yellow rectangle
-     * 
-     * @param g
-     */
-    @Override
-    public void paint(Graphics g) {
-        g = strategy.getDrawGraphics();
-        Graphics2D g2d = (Graphics2D) g;
+	public void 
+	actionPerformed (ActionEvent ae) 
+	{
+		window.max_limit = detail;
+		window.recompute();
+	}
+}
 
-        super.paint(g);
-        if (show_rect == true) {
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-            g2d.setBackground(new Color(255, 170, 0, 128));
-            g2d.setColor(Color.yellow);
-            g2d.fillRect(mouse_x - radius / 2 * 3, mouse_y - radius, radius * 3, radius * 2);
-        }
+public class Window extends JFrame 
+{
+	private boolean show_rect;
+	private int mouse_x;
+	private int mouse_y;
+	private int radius;
 
-        strategy.show();
-    }
+	private double minx; 
+	private double miny;
+	private double maxx; 
+	private double maxy;
+	public int max_limit;
 
-    window() throws IOException {
-        minx = -2.0;
-        miny = -1.0;
-        maxx = 1.0;
-        maxy = 1.0;
-        limit = 50;
-        compo = getGlassPane();
-        
-        setTitle("Mandelbrot set");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private Component component;
+	private Canvas canvas;
+	private BufferStrategy buffer_strategy;
 
-        JMenuBar bar = new JMenuBar();
-        JMenu renderers = new JMenu("Renderers");
-        JMenu detail = new JMenu("Detail");
-        JMenu ps = new JMenu("Paint strategy");
-        JMenu cp = new JMenu("Color palette");
-        
-        JRadioButtonMenuItem serial = new JRadioButtonMenuItem("Serial");
-        serial.addActionListener(new ActionListener() {
+	private SerialRenderer serial_renderer;
+	private ParallelRenderer parallel_renderer;
+	private Renderer renderer;
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_serial();
-                repaint();
-            }
-        });
-        renderers.add(serial);
-        JRadioButtonMenuItem parallel = new JRadioButtonMenuItem("Parallel");
-        parallel.addActionListener(new ActionListener() {
+	private SineStrategy sine_strategy;
+	private HighContrastStrategy high_contrast_strategy;
+	private GradientStrategy gradient_strategy;
+	private Strategy strategy;
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_parallel();
-                repaint();
-            }
-        });
-        renderers.add(parallel);
+	private SolidPalette white_black_solid_palette;
+	private Palette palette;
 
-        ButtonGroup renderers_group = new ButtonGroup();
-        renderers_group.add(serial);
-        renderers_group.add(parallel);
-        
+	private JMenuBar menu_bar;
+	private JMenu renderer_menu;
+	private JMenu detail_menu; 
+	private JMenu strategy_menu; 
+	private JMenu palette_menu;
 
-        JRadioButtonMenuItem limit15 = new JRadioButtonMenuItem("Very low");
-        limit15.addActionListener(new ActionListener() {
+	private JRadioButtonMenuItem serial_renderer_item;
+	private JRadioButtonMenuItem parallel_renderer_item;
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 15;
-                c.change_limit(15);
-                repaint();
-            }
-        });
-        detail.add(limit15);
+	@Override
+	public void paint(Graphics g) 
+	{
+		g = buffer_strategy.getDrawGraphics();
+		Graphics2D g2d = (Graphics2D) g;
 
-        JRadioButtonMenuItem limit50 = new JRadioButtonMenuItem("Low");
-        limit50.addActionListener(new ActionListener() {
+		super.paint(g);
+		if (show_rect) 
+		{
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
+			    0.5f));
+			g2d.setBackground(new Color(255, 170, 0, 128));
+			g2d.setColor(Color.yellow);
+			g2d.fillRect(mouse_x - radius / 2 * 3, mouse_y - radius, radius * 3, 
+					radius * 2);
+		}
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 50;
-                c.change_limit(50);
-                repaint();
-            }
-        });
-        detail.add(limit50);
+		buffer_strategy.show();
+	}
 
-        JRadioButtonMenuItem limit250 = new JRadioButtonMenuItem("Medium");
-        limit250.addActionListener(new ActionListener() {
+	private void
+	set_defaults ()
+	{
+		minx = -2.0;
+		miny = -1.0;
+		maxx = 1.0;
+		maxy = 1.0;
+		max_limit = 50;
+		renderer = serial_renderer;
+		strategy = gradient_strategy;
+		palette = white_black_solid_palette;
+		radius = 50;
+		mouse_x = 0;
+		mouse_y = 0;
+		show_rect = true;
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 250;
-                c.change_limit(250);
-                repaint();
-            }
-        });
-        detail.add(limit250);
+		serial_renderer_item.setSelected(true);
+		gradient_strategy_item.setSelected(true);
+		detail_low_item.setSelected(true);
+	}
 
+	private void
+	init_menubar ()
+	{
+		menu_bar = new JMenuBar();
+		renderer_menu = new JMenu("Renderer");
+		detail_menu = new JMenu("Detail");
+		strategy_menu = new JMenu("Paint strategy");
+		palette_menu = new JMenu("Color palette");
 
-        JRadioButtonMenuItem limit500 = new JRadioButtonMenuItem("High");
-        limit500.addActionListener(new ActionListener() {
+		menu_bar.add(renderer_menu);
+		menu_bar.add(detail_menu);
+		menu_bar.add(strategy_menu);
+		menu_bar.add(palette_menu);
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 500;
-                c.change_limit(500);
-                repaint();
-            }
-        });
-        detail.add(limit500);
-        JRadioButtonMenuItem limit5000 = new JRadioButtonMenuItem("Very high");
-        limit5000.addActionListener(new ActionListener() {
+		menu_bar.setVisible(true);
+		setJMenuBar(menu_bar);
+	}
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 5000;
-                c.change_limit(5000);
-                repaint();
-            }
-        });
-        detail.add(limit5000);
+	private void
+	init_renderer_menu ()
+	{
+		serial_renderer_item = new JRadioButtonMenuItem("Serial");
+		parallel_renderer_item = new JRadioButtonMenuItem("Parallel");
 
-        JRadioButtonMenuItem limit10000 = new JRadioButtonMenuItem("Ultra high");
-        limit10000.addActionListener(new ActionListener() {
+		ButtonGroup renderer_group = new ButtonGroup();
+		renderer_group.add(serial_renderer_item);
+		renderer_group.add(parallel_renderer_item);
 
-            public void actionPerformed(ActionEvent ae) {
-                limit = 10000;
-                c.change_limit(10000);
-                repaint();
-            }
-        });
-        detail.add(limit10000);
+		renderer_menu.add(serial_renderer_item);
+		renderer_menu.add(parallel_renderer_item);
 
-        ButtonGroup limit_group = new ButtonGroup();
-        limit_group.add(limit15);
-        limit_group.add(limit50);
-        limit_group.add(limit250);
-        limit_group.add(limit500);
-        limit_group.add(limit5000);
-        limit_group.add(limit10000);
+		serial_renderer_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				renderer = serial_renderer;
+				recompute();
+			}
+		}); 
 
-               
-        JRadioButtonMenuItem contrast = new JRadioButtonMenuItem("High contrast");
-        contrast.addActionListener(new ActionListener() {
+		parallel_renderer_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				renderer = parallel_renderer;
+				recompute();
+			}
+		}); 
+	}
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_contrast();
-                repaint();
-            }
-        });
+	private void
+	init_detail_menu ()
+	{
+		detail_very_low_item = new JRadioButtonMenuItem("Very low");
+		detail_low_item = new JRadioButtonMenuItem("Low");
+		detail_medium_item = new JRadioButtonMenuItem("Medium");
+		detail_high_item = new JRadioButtonMenuItem("High");
+		detail_very_high_item = new JRadioButtonMenuItem("Very high");
+		detail_ultra_high_item = new JRadioButtonMenuItem("Ultra high");
 
-        JRadioButtonMenuItem distance = new JRadioButtonMenuItem("Jump distance gradient");
-        distance.addActionListener(new ActionListener() {
+		ButtonGroup detail_group = new ButtonGroup();
+		detail_group.add(detail_very_low_item);
+		detail_group.add(detail_low_item);
+		detail_group.add(detail_medium_item);
+		detail_group.add(detail_high_item);
+		detail_group.add(detail_very_high_item);
+		detail_group.add(detail_ultra_high_item);
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_gradient();
-                repaint();
-            }
-        });
+		detail_menu.add(detail_very_low_item);
+		detail_menu.add(detail_low_item);
+		detail_menu.add(detail_medium_item);
+		detail_menu.add(detail_high_item);
+		detail_menu.add(detail_very_high_item);
+		detail_menu.add(detail_ultra_high_item);
 
-        ps.add(contrast);
-        ps.add(distance);
+		detail_very_low_item.addActionListener(new DetailListener(15, this));
+		detail_low_item.addActionListener(new DetailListener(50, this));
+		detail_medium_item.addActionListener(new DetailListener(250, this));
+		detail_high_item.addActionListener(new DetailListener(500, this));
+		detail_very_high_item.addActionListener(new DetailListener(5000, this));
+		detail_ultra_high_item.addActionListener(new DetailListener(10000, this));
+	}
 
-        ButtonGroup paint_group = new ButtonGroup();
-        paint_group.add(contrast);
-        paint_group.add(distance);
+	private void
+	init_strategy_menu ()
+	{
+		high_contrast_strategy_item = new JRadioButtonMenuItem("High contrast");
+		gradient_strategy_item = new JRadioButtonMenuItem("Jump distance gradient");
+		sine_strategy_item = new JRadioButtonMenuItem("Sine of distance");
 
-        
-        JRadioButtonMenuItem blackwhite = new JRadioButtonMenuItem("Black & White");
-        blackwhite.addActionListener(new ActionListener() {
+		ButtonGroup strategy_group = new ButtonGroup();
+		strategy_group.add(serial_item);
+		strategy_group.add(parallel_item);
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_black_n_white();
-                repaint();
-            }
-        });
+		strategy_menu.add(serial_item);
+		strategy_menu.add(parallel_item);
+	}
 
-        JRadioButtonMenuItem sunshine = new JRadioButtonMenuItem("Sunshine");
-        sunshine.addActionListener(new ActionListener() {
+	private final void
+	init_renderers ()
+	{
+		renderer = null;
+		serial_renderer = new SerialRenderer();
+		parallel_renderer = new ParallelRenderer(4, new Dimension(60, 40));
+	}
 
-            public void actionPerformed(ActionEvent ae) {
-                c.change_to_sunshine();
-                repaint();
-            }
-        });
+	private final void
+	init_strategies ()
+	{
+		strategy = null;
+		sine_strategy = new SineStrategy();
+		high_contrast_strategy = new HighContrastStrategy();
+		gradient_strategy = new GradientStrategy();
+	}
 
-        cp.add(blackwhite);
-        cp.add(sunshine);
+	private final void
+	initialize ()
+	{
+		component = getGlassPane();
+		setTitle("Mandelbrot set");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setVisible(true);
+		createBufferStrategy(2);
+		buffer_strategy = getBufferStrategy();
+		enableEvents(
+		    AWTEvent.MOUSE_EVENT_MASK | 
+		    AWTEvent.MOUSE_MOTION_EVENT_MASK | 
+		    AWTEvent.MOUSE_WHEEL_EVENT_MASK);
+	}
 
-        ButtonGroup palette_group = new ButtonGroup();
-        palette_group.add(blackwhite);
-        palette_group.add(sunshine);
+	public 
+	Window () 
+	{
+		initialize();
 
-        
-        blackwhite.setSelected(true);
-        contrast.setSelected(true);
-        serial.setSelected(true);
-        limit50.setSelected(true);
-        
-        bar.add(renderers);
-        bar.add(detail);
-        bar.add(ps);
-        bar.add(cp);
-        bar.setVisible(true);
+		init_menubar();
+		init_renderer_menu();
+		init_detail_menu();
+		init_strategy_menu();
+		init_palette_menu();
 
-        setJMenuBar(bar);
+		init_renderers();
+		init_strategies();
+		init_palettes();
 
+		set_defaults();
 
-        enableEvents(AWTEvent.MOUSE_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK | AWTEvent.MOUSE_WHEEL_EVENT_MASK);
-        setResizable(false);
-        setVisible(true);
-        createBufferStrategy(2);
-        strategy = getBufferStrategy();
-        show_rect = true;
-       
-        c = new canvas();
-        add(c);
-        setSize(600, c.img.getHeight() + getJMenuBar().getHeight() + getInsets().top);
+		canvas = new Canvas();
+		add(canvas);
+		setSize(600, 400 + getJMenuBar().getHeight() + getInsets().top);
 
-        radius = 50;
-        mouse_x = 0;
-        mouse_y = 0;
-
-
-        addMouseListener(new MouseListener() {
+		addMouseListener(new MouseListener() {
 
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == java.awt.event.MouseEvent.BUTTON1 && show_rect == true) {
