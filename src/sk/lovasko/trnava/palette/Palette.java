@@ -11,3 +11,4 @@ public interface Palette
 	int 
 	decide (final double source);
 }
+
