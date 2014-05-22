@@ -320,6 +320,23 @@ public class Window extends JFrame
 		init_menubar();
 		init_renderer_menu();
 		init_detail_menu();
+	private final void
+	recompute ()
+	{
+		Thread thread = new Thread() 
+		{
+			public final void
+			run ()
+			{
+				canvas.image = renderer.render(minx, miny, maxx, maxy, max_limit,
+				    strategy, palette);
+				repaint();
+			}
+		};
+
+		thread.start();
+	}
+
 		init_strategy_menu();
 		init_palette_menu();
 
