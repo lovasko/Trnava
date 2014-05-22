@@ -207,8 +207,9 @@ public class Window extends JFrame
 		sine_strategy_item = new JRadioButtonMenuItem("Sine of distance");
 
 		ButtonGroup strategy_group = new ButtonGroup();
-		strategy_group.add(serial_item);
-		strategy_group.add(parallel_item);
+		strategy_group.add(high_contrast_strategy_item);
+		strategy_group.add(gradient_strategy_item);
+		strategy_group.add(sine_strategy_item);
 
 		strategy_menu.add(high_contrast_strategy_item);
 		strategy_menu.add(gradient_strategy_item);
