@@ -247,6 +247,25 @@ public class Window extends JFrame
 	}
 
 	private final void
+	init_palette_menu ()
+	{
+		white_black_solid_palette_item = new JRadioButtonMenuItem("B&W");
+
+		ButtonGroup palette_group = new ButtonGroup();
+		palette_group.add(white_black_solid_palette_item);
+
+		white_black_solid_palette_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				palette = white_black_solid_palette;
+				recompute();
+			}
+		}); 
+	}
+
+	private final void
 	init_renderers ()
 	{
 		renderer = null;
