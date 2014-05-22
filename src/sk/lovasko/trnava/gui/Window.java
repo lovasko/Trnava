@@ -72,6 +72,19 @@ public class Window extends JFrame
 	private JRadioButtonMenuItem serial_renderer_item;
 	private JRadioButtonMenuItem parallel_renderer_item;
 
+	private JRadioButtonMenuItem detail_very_low_item;
+	private JRadioButtonMenuItem detail_low_item;
+	private JRadioButtonMenuItem detail_medium_item;
+	private JRadioButtonMenuItem detail_high_item;
+	private JRadioButtonMenuItem detail_very_high_item;
+	private JRadioButtonMenuItem detail_ultra_high_item;
+
+	private JRadioButtonMenuItem sine_strategy_item;
+	private JRadioButtonMenuItem high_contrast_strategy_item;
+	private JRadioButtonMenuItem gradient_strategy_item;
+
+	private JRadioButtonMenuItem white_black_solid_palette_item;
+
 	@Override
 	public final void 
 	paint(Graphics g) 
