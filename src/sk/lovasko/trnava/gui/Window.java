@@ -125,6 +125,7 @@ public class Window extends JFrame
 		serial_renderer_item.setSelected(true);
 		gradient_strategy_item.setSelected(true);
 		detail_low_item.setSelected(true);
+		white_black_solid_palette_item.setSelected(true);
 	}
 
 	private final void
