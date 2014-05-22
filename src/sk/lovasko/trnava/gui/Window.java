@@ -73,7 +73,8 @@ public class Window extends JFrame
 	private JRadioButtonMenuItem parallel_renderer_item;
 
 	@Override
-	public void paint(Graphics g) 
+	public final void 
+	paint(Graphics g) 
 	{
 		g = buffer_strategy.getDrawGraphics();
 		Graphics2D g2d = (Graphics2D) g;
@@ -92,7 +93,7 @@ public class Window extends JFrame
 		buffer_strategy.show();
 	}
 
-	private void
+	private final void
 	set_defaults ()
 	{
 		minx = -2.0;
@@ -113,7 +114,7 @@ public class Window extends JFrame
 		detail_low_item.setSelected(true);
 	}
 
-	private void
+	private final void
 	init_menubar ()
 	{
 		menu_bar = new JMenuBar();
@@ -131,7 +132,7 @@ public class Window extends JFrame
 		setJMenuBar(menu_bar);
 	}
 
-	private void
+	private final void
 	init_renderer_menu ()
 	{
 		serial_renderer_item = new JRadioButtonMenuItem("Serial");
@@ -165,7 +166,7 @@ public class Window extends JFrame
 		}); 
 	}
 
-	private void
+	private final void
 	init_detail_menu ()
 	{
 		detail_very_low_item = new JRadioButtonMenuItem("Very low");
@@ -198,7 +199,7 @@ public class Window extends JFrame
 		detail_ultra_high_item.addActionListener(new DetailListener(10000, this));
 	}
 
-	private void
+	private final void
 	init_strategy_menu ()
 	{
 		high_contrast_strategy_item = new JRadioButtonMenuItem("High contrast");
