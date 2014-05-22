@@ -210,8 +210,39 @@ public class Window extends JFrame
 		strategy_group.add(serial_item);
 		strategy_group.add(parallel_item);
 
-		strategy_menu.add(serial_item);
-		strategy_menu.add(parallel_item);
+		strategy_menu.add(high_contrast_strategy_item);
+		strategy_menu.add(gradient_strategy_item);
+		strategy_menu.add(sine_strategy_item);
+
+		high_contrast_strategy_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				strategy = high_contrast_strategy;
+				recompute();
+			}
+		}); 
+
+		gradient_strategy_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				strategy = gradient_strategy;
+				recompute();
+			}
+		}); 
+
+		sine_strategy_item.addActionListener(new ActionListener() 
+		{
+			public void 
+			actionPerformed (ActionEvent ae) 
+			{
+				strategy = sine_strategy;
+				recompute();
+			}
+		}); 
 	}
 
 	private final void
