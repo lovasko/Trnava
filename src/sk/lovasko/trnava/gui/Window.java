@@ -297,6 +297,14 @@ public class Window extends JFrame
 	}
 
 	private final void
+	init_palettes ()
+	{
+		palette = null;	
+		white_black_solid_palette = new SolidPalette(Color.black.toRGB(),
+		    Color.white.toRGB());
+	}
+
+	private final void
 	initialize ()
 	{
 		component = getGlassPane();
@@ -312,14 +320,6 @@ public class Window extends JFrame
 		    AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 	}
 
-	public 
-	Window () 
-	{
-		initialize();
-
-		init_menubar();
-		init_renderer_menu();
-		init_detail_menu();
 	private final void
 	recompute ()
 	{
@@ -337,6 +337,14 @@ public class Window extends JFrame
 		thread.start();
 	}
 
+	public 
+	Window () 
+	{
+		initialize();
+
+		init_menubar();
+		init_renderer_menu();
+		init_detail_menu();
 		init_strategy_menu();
 		init_palette_menu();
 
@@ -344,14 +352,6 @@ public class Window extends JFrame
 		init_strategies();
 		init_palettes();
 
-
-	private final void
-	init_palettes ()
-	{
-		palette = null;	
-		white_black_solid_palette = new SolidPalette(Color.black.toRGB(),
-		    Color.white.toRGB());
-	}
 		set_defaults();
 
 		canvas = new Canvas();
