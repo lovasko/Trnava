@@ -262,6 +262,14 @@ public class Window extends JFrame
 		init_strategies();
 		init_palettes();
 
+
+	private final void
+	init_palettes ()
+	{
+		palette = null;	
+		white_black_solid_palette = new SolidPalette(Color.black.toRGB(),
+		    Color.white.toRGB());
+	}
 		set_defaults();
 
 		canvas = new Canvas();
