@@ -5,6 +5,7 @@ import sk.lovasko.trnava.palette.Palette;
 
 import java.awt.Point;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 
 public class SerialRenderer implements Renderer 
 {

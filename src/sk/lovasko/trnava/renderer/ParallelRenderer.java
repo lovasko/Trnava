@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 
 public class ParallelRenderer implements Renderer 
 {
