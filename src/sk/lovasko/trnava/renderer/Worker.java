@@ -59,7 +59,7 @@ public final class Worker implements Callable<Result>
 
 				final double strategy_decision = strategy.decie(xx, yy, escaped,
 				    max_limit, limit);
-				img.setRGB(x, y, palette.decide(strategy_decision));
+				image.setRGB(x, y, palette.decide(strategy_decision));
 			}
 		}
 
