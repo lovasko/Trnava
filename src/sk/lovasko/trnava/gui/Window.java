@@ -321,7 +321,7 @@ public class Window extends JFrame
 		    AWTEvent.MOUSE_WHEEL_EVENT_MASK);
 	}
 
-	private final void
+	public final void
 	recompute ()
 	{
 		Thread thread = new Thread() 
