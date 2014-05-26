@@ -303,8 +303,8 @@ public class Window extends JFrame
 	init_palettes ()
 	{
 		palette = null;	
-		white_black_solid_palette = new SolidPalette(Color.black.toRGB(),
-		    Color.white.toRGB());
+		white_black_solid_palette = new SolidPalette(Color.black.getRGB(),
+		    Color.white.getRGB());
 	}
 
 	private final void
