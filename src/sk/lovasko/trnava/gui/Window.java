@@ -11,6 +11,7 @@ import sk.lovasko.trnava.strategy.GradientStrategy;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.*;
 
