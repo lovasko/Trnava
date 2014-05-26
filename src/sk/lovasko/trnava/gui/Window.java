@@ -380,7 +380,7 @@ public class Window extends JFrame
                     maxy = iy + ((double) (endy - dy) * (ay - iy) / 400.0);
 
 
-                    c.render(minx, miny, maxx, maxy, limit);
+                    recompute();
 
                     repaint();
                 } else if (me.getButton() == java.awt.event.MouseEvent.BUTTON2) {
@@ -458,7 +458,7 @@ public class Window extends JFrame
             }
         });
 
-        c.render(minx, miny, maxx, maxy, limit);
+				recompute();
         repaint();
     }
 }
