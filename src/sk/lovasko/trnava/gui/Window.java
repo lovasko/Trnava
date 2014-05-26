@@ -7,6 +7,8 @@ import sk.lovasko.trnava.strategy.Strategy;
 import sk.lovasko.trnava.strategy.SineStrategy;
 import sk.lovasko.trnava.strategy.HighContrastStrategy;
 import sk.lovasko.trnava.strategy.GradientStrategy;
+import sk.lovasko.trnava.palette.Palette;
+import sk.lovasko.trnava.palette.SolidPalette;
 
 import java.awt.*;
 import java.awt.event.*;
