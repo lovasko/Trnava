@@ -12,7 +12,7 @@ public final class Canvas extends JPanel
 	public void 
 	paint (Graphics g) 
 	{
-		g.drawImage(img, 0, 0, null);
+		g.drawImage(image, 0, 0, null);
 	}
 }
 
