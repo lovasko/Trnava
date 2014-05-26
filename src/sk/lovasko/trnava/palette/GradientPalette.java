@@ -49,7 +49,7 @@ public final class GradientPalette implements Palette
 			c1.getGreen() + (int)(((double)(c2.getGreen() - c1.getGreen())) * step), 
 			c1.getBlue()  + (int)(((double)(c2.getBlue()  - c1.getBlue()))  * step));
 
-		return result;
+		return result.getRGB();
 	}
 }
 
