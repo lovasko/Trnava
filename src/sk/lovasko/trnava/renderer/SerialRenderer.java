@@ -21,7 +21,7 @@ public class SerialRenderer implements Renderer
 		worker.max_limit = max_limit;
 		worker.strategy = strategy;
 		worker.palette = palette;
-		worker.start = new Point(0.0, 0.0);
+		worker.start = new Point(0, 0);
 		worker.size = size;
 
 		Result result = worker.call();		
