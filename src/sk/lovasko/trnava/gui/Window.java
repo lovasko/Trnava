@@ -14,7 +14,7 @@ import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import javax.swing.*;
 
-private final class DetailListener implements ActionListener
+final class DetailListener implements ActionListener
 {
 	private final int detail;
 	private final Window window;
