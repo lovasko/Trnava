@@ -27,7 +27,7 @@ public final class Worker implements Callable<Result>
 	{
 		BufferedImage image = new BufferedImage(size.width, size.height,
 		     BufferedImage.TYPE_INT_RGB);
-		Result result = new Result(start, image);
+		Result result = new Result(image, start);
 
 		for (int y = 0; y < size.height; y++) 
 		{
