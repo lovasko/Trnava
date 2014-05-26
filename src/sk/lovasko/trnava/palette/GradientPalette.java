@@ -24,7 +24,7 @@ public final class GradientPalette implements Palette
 	{
 		int idx;
 
-		for (idx = 0; idx < stops.size() && stops.at(idx) < stop; idx++);
+		for (idx = 0; idx < stops.size() && stops.get(idx) < stop; idx++);
 			
 		stops.add(idx, stop);
 		colors.add(idx, color);
@@ -35,14 +35,14 @@ public final class GradientPalette implements Palette
 	{
 		int idx;
 
-		for (idx = 0; idx < stops.size() && stops.at(idx) <= source; idx++);
+		for (idx = 0; idx < stops.size() && stops.get(idx) <= source; idx++);
 
-		final double max_diff = stops.at(idx) - stops(idx - 1);
-		final double diff = source - stops.at(idx - 1);
+		final double max_diff = stops.get(idx) - stops.get(idx - 1);
+		final double diff = source - stops.get(idx - 1);
 		final double step = diff / max_diff;
 
-		final Color c1 = new Color(colors.at(idx-1));		
-		final Color c2 = new Color(colors.at(idx));
+		final Color c1 = new Color(colors.get(idx-1));		
+		final Color c2 = new Color(colors.get(idx));
 
 		final Color result = new Color(
 			c1.getRed()   + (int)(((double)(c2.getRed()   - c1.getRed()))   * step), 
