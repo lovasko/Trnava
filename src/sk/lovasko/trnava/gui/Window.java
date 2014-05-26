@@ -332,7 +332,7 @@ public class Window extends JFrame
 			run ()
 			{
 				canvas.image = renderer.render(minx, miny, maxx, maxy, max_limit,
-				    strategy, palette);
+				    strategy, palette, new Dimension(600, 400));
 				repaint();
 			}
 		};
